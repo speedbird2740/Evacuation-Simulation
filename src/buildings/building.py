@@ -4,11 +4,11 @@ from structures import Walkway, Room
 
 
 class Building:
-    ID = utils.get_id()
 
     def __init__(self):
         self.structures = {}
         self.structure_connections = []
+        self.ID = utils.get_id()
 
     def add_walkway(self, length: float, max_people: int, is_blocked: bool = False, connection: str = None):
         if connection is not None and connection not in self.structures:
