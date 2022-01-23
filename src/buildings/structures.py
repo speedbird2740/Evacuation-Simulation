@@ -14,7 +14,7 @@ class Walkway:
         self.ID = utils.get_id()
 
     async def cross(self, person):
-        if len(self.people) >= self.CAPACITY:
+        if self.people >= self.CAPACITY:
             raise errors.WalkwayFull
 
         self.people += 1
