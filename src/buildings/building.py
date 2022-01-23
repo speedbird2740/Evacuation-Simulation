@@ -45,6 +45,6 @@ class Building:
     def add_person(self, room_id: int, count: int=1):
         pass
 
-    def change_struct_status(self, is_blocked: bool = None, max_people: int = None):
-        if is_blocked is None and max_people is None:
+    def change_struct_status(self, is_blocked: bool = None):
+        if is_blocked is None:
             raise Exception
