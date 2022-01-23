@@ -33,3 +33,11 @@ class Room:
         self.people = []
         self.is_blocked = is_blocked
         self.ID = utils.get_id()
+
+    def add_person(self, count: int):
+        if len(self.people) >= self.max_people or len(self.people) + count >= self.max_people:
+            raise errors.RoomFull
+
+        new_person = "placeholder"
+
+        self.people.append(new_person)
