@@ -4,5 +4,7 @@ import utils
 class Person:
     ID = utils.get_id()
 
-    def __init__(self, travel_speed: float = 3.5):
-        self.travel_speed = travel_speed
+    def __init__(self, walk_speed):
+        self.travel_speed = walk_speed
+
+    # More code will be written (eventually)
