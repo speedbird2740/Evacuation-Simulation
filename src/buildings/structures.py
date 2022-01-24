@@ -3,6 +3,8 @@ import asyncio
 import utils
 import errors
 
+from evacuees.person import Person
+
 
 class Walkway:
 
@@ -25,6 +27,16 @@ class Walkway:
         self.people -= 1
         # More code in development
 
+    async def simulate_smoke(self, intensity: int):
+        if intensity > 5:
+            raise Exception
+        # smoke effects on evacuees to be determined
+
+    async def simulate_fire(self, intensity: int):
+        if intensity > 5:
+            raise Exception
+        # fire damage/effects on evacuees to be determined
+
 
 class Room:
 
@@ -34,10 +46,21 @@ class Room:
         self.is_blocked = is_blocked
         self.ID = utils.get_id()
 
-    def add_person(self, count: int):
+    def add_person(self, count: int = 1, walk_speed: float = 3.5):
         if len(self.people) >= self.max_people or len(self.people) + count >= self.max_people:
             raise errors.RoomFull
 
-        new_person = "placeholder"
+        while count > 0:
+            new_person = Person(walk_speed)
+            self.people.append(new_person)
+            count -= 1
 
-        self.people.append(new_person)
+    async def simulate_smoke(self, intensity: int):
+        if intensity > 5:
+            raise Exception
+        # smoke effects on evacuees to be determined
+
+    async def simulate_fire(self, intensity: int):
+        if intensity > 5:
+            raise Exception
+        # fire damage/effects on evacuees to be determined
