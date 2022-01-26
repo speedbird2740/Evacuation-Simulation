@@ -14,6 +14,9 @@ class Walkway:
         self.people = 0
         self.is_blocked = is_blocked
         self.ID = utils.get_id()
+        self.fire_intensity = 0
+        self.travel_multiplier = 1
+        self.auto_smoke = False
 
     async def cross(self, person):
         if self.people >= self.CAPACITY:
@@ -22,17 +25,35 @@ class Walkway:
         self.people += 1
         travel_time = self.LENGTH / person.travel_speed
 
-        await asyncio.sleep(travel_time)
+        while travel_time > 0:
+            if travel_time >= 1:
+                await asyncio.sleep(1 * self.travel_multiplier)
+                travel_time -= 1
+            else:
+                await asyncio.sleep(travel_time * self.travel_multiplier)
+                travel_time = 0
 
         self.people -= 1
         # More code in development
 
-    async def simulate_smoke(self, intensity: int):
-        if intensity > 5:
+    async def simulate_smoke(self, multiplier: float = None, auto: bool = False):
+        if multiplier > 6:
             raise Exception
-        # smoke effects on evacuees to be determined
+        if multiplier and auto:
+            raise Exception
 
-    async def simulate_fire(self, intensity: int):
+        if auto:
+            if self.auto_smoke:
+                raise Exception
+            self.auto_smoke = True
+
+            while self.travel_multiplier < 6:
+                self.travel_multiplier += 0.1
+                await asyncio.sleep(2 / self.fire_intensity if self.fire_intensity > 0 else 1)
+        else:
+            self.travel_multiplier = multiplier
+
+    async def simulate_fire(self, intensity: float):
         if intensity > 5:
             raise Exception
         # fire damage/effects on evacuees to be determined
