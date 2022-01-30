@@ -1,10 +1,8 @@
-import utils
+import typing
 
 
-class Person:
-    ID = utils.get_id()
+class Person(typing.TypedDict):
+    ID: str
+    travel_speed: float
+    injuries: dict[str, float] # {name: slowdown %}
 
-    def __init__(self, walk_speed):
-        self.travel_speed = walk_speed
-
-    # More code will be written (eventually)
