@@ -36,10 +36,11 @@ class Walkway:
         self.people -= 1
         # More code in development
 
-    async def simulate_smoke(self, multiplier: float = None, auto: bool = False):
-        if multiplier > 6:
+    async def simulate_smoke(self, intensity: float, auto: bool):
+        # Smoke damage/effects to be determined
+        if intensity > 5:
             raise Exception
-        if multiplier and auto:
+        if intensity and auto:
             raise Exception
 
         if auto:
@@ -51,9 +52,9 @@ class Walkway:
                 self.travel_multiplier += 0.1
                 await asyncio.sleep(2 / self.fire_intensity if self.fire_intensity > 0 else 1)
         else:
-            self.travel_multiplier = multiplier
+            self.travel_multiplier = intensity
 
-    async def simulate_fire(self, intensity: float):
+    async def simulate_fire(self, intensity: float, auto: bool):
         if intensity > 5:
             raise Exception
         # fire damage/effects on evacuees to be determined
@@ -67,7 +68,7 @@ class Room:
         self.is_blocked = is_blocked
         self.ID = utils.get_id()
 
-    def add_person(self, count: int = 1, walk_speed: float = 3.5):
+    def add_person(self, count: int, walk_speed: float):
         if len(self.people) >= self.max_people or len(self.people) + count >= self.max_people:
             raise errors.RoomFull
 

@@ -42,9 +42,27 @@ class Building:
         if connection is not None:
             self.structure_connections.append((connection, new_room.ID))
 
-    def add_person(self, room_id: int, count: int=1):
-        pass
-
-    def change_struct_status(self, is_blocked: bool = None):
-        if is_blocked is None:
+    def add_person(self, room_id: int, count: int = 1, walk_speed: float = 3.5):
+        if room_id not in self.structures:
             raise Exception
+
+        room = self.structures[room_id]
+        room.add_person(count=count, walk_speed=walk_speed)
+
+    def change_struct_status(self, struct_id: str, name: str, value: int or bool, auto: bool = False):
+        if struct_id not in self.structures:
+            raise Exception
+
+        struct = self.structures[struct_id]
+
+        if type(value) == bool:
+            if name == "is_blocked":
+                struct.is_blocked = value
+            else:
+                raise Exception
+
+        elif type(value) == int:
+            if name == "fire":
+                struct.simulate_fire(intensity=value, auto=auto)
+            elif name == "smoke":
+                struct.simulate_smoke(intensity=value, auto=auto)
