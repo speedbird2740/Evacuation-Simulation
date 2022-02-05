@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 import utils
 import errors
@@ -29,12 +30,19 @@ class Walkway:
         while travel_time > 0:
             if travel_time >= 1:
                 await asyncio.sleep(1 * self.travel_multiplier)
+                person.ttl -= 1 * self.travel_multiplier
                 travel_time -= 1
             else:
                 await asyncio.sleep(travel_time * self.travel_multiplier)
+                person.ttl -= travel_time * self.travel_multiplier
                 travel_time = 0
 
+            if person.ttl <= 0:
+                raise Exception
+
         self.people -= 1
+
+        return person
         # More code in development
 
     async def simulate_smoke(self, intensity: float, auto: bool):
@@ -72,7 +80,7 @@ class Walkway:
 
 class Room:
 
-    def __init__(self, max_people: int, is_blocked: bool, is_exit: bool = False):
+    def __init__(self, max_people: int, is_blocked: bool):
         self.max_people = max_people
         self.people = {}
         self.is_blocked = is_blocked
