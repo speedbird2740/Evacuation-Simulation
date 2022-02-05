@@ -1,5 +1,5 @@
 import asyncio
-import time
+import traceback
 
 import utils
 import errors
@@ -130,3 +130,20 @@ class Room:
                 await asyncio.sleep(2 / intensity if intensity > 0 else 1)
         else:
             self.fire_intensity = intensity
+
+    async def _simulate_smoke(self):
+        while True:
+            if len(self.people) > 0:
+                try:
+                    for person in self.people:
+                        person.ttl -= 1 * self.travel_multiplier
+                except Exception:
+                    traceback.print_exc()
+
+            await asyncio.sleep(1)
+
+    async def _simulate_fire(self):
+        # to be determined
+        while True:
+            if len(self.people) > 0:
+                pass
