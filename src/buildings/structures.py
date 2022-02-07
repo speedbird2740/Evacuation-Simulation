@@ -1,8 +1,7 @@
 import asyncio
 import traceback
 
-import utils
-import errors
+from buildings import utils, errors
 
 from evacuees.person import Person
 
@@ -80,7 +79,7 @@ class Walkway:
 
 class Room:
 
-    def __init__(self, max_people: int, is_blocked: bool):
+    def __init__(self, max_people: int, is_blocked: bool = False):
         self.max_people = max_people
         self.people = {}
         self.is_blocked = is_blocked
@@ -90,14 +89,32 @@ class Room:
         self.auto_smoke = False
         self.auto_fire = False
 
-    def add_person(self, count: int, walk_speed: float):
-        if len(self.people) >= self.max_people or len(self.people) + count >= self.max_people:
+    def add_person(
+            self, walk_speed: float, count: int = 1, inuries=None, ttl: float = 120, person_id: str = utils.get_id()):
+        if inuries is None:
+            inuries = {}
+
+        if len(self.people) >= self.max_people or len(self.people) + count > self.max_people:
             raise errors.RoomFull
 
         while count > 0:
-            new_person = Person(walk_speed, ID=utils.get_id())
+            new_person = Person(walk_speed, ID=person_id, injuries=inuries, ttl=ttl)
             self.people[new_person.ID] = new_person
             count -= 1
+
+    def get_person(self, person_id: str = None):
+        if person_id not in self.people and person_id is not None:
+            raise Exception
+        if not len(self.people) > 0:
+            raise Exception
+
+        if person_id is not None:
+            person = self.people.pop(person_id)
+        else:
+            keys = list(self.people.keys())
+            person = self.people.pop(keys[0])
+
+        return person
 
     async def simulate_smoke(self, intensity: int, auto: bool):
         # Smoke damage/effects to be determined
@@ -134,11 +151,11 @@ class Room:
     async def _simulate_smoke(self):
         while True:
             if len(self.people) > 0:
-                try:
-                    for person in self.people:
+                for person in self.people:
+                    try:
                         person.ttl -= 1 * self.travel_multiplier
-                except Exception:
-                    traceback.print_exc()
+                    except Exception:
+                        traceback.print_exc()
 
             await asyncio.sleep(1)
 
@@ -146,4 +163,8 @@ class Room:
         # to be determined
         while True:
             if len(self.people) > 0:
-                pass
+                for person in self.people:
+                    try:
+                        person.ttl -= 4 * self.fire_intensity  # final value to be determined
+                    except Exception:
+                        traceback.print_exc()
