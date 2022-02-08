@@ -58,7 +58,7 @@ class Walkway:
 
             while self.travel_multiplier < 5:
                 self.travel_multiplier += 0.1
-                await asyncio.sleep(2 / self.fire_intensity if self.fire_intensity > 0 else 1)
+                await asyncio.sleep(2 / self.fire_intensity if self.fire_intensity > 0 else 0.1)
         else:
             self.travel_multiplier = intensity
 
@@ -72,7 +72,7 @@ class Walkway:
 
             while self.fire_intensity < 5:
                 self.fire_intensity += 0.1
-                await asyncio.sleep(2 / intensity if intensity > 0 else 1)
+                await asyncio.sleep(2 / intensity if intensity > 0 else 0.1)
         else:
             self.fire_intensity = intensity
 
