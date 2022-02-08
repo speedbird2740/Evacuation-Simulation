@@ -8,11 +8,12 @@ from evacuees.person import Person
 
 class Walkway:
 
-    def __init__(self, length: float, max_people: int, is_blocked: bool, is_exit: bool = False):
+    def __init__(self, length: float, max_people: int, is_blocked: bool, is_exit: bool):
         self.LENGTH = length
         self.CAPACITY = max_people
         self.people = 0
         self.is_blocked = is_blocked
+        self.is_exit = is_exit
         self.ID = utils.get_id()
         self.fire_intensity = 0
         self.travel_multiplier = 1
@@ -89,8 +90,8 @@ class Room:
         self.auto_smoke = False
         self.auto_fire = False
 
-    def add_person(
-            self, walk_speed: float, count: int = 1, injuries=None, ttl: float = 120, person_id: str = utils.get_id()):
+    def add_person(self, walk_speed: float, count: int = 1, injuries=None, ttl: float = 120,
+                   person_id: str = utils.get_id()):
         if injuries is None:
             injuries = {}
 
