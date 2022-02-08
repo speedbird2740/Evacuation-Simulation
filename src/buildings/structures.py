@@ -90,15 +90,15 @@ class Room:
         self.auto_fire = False
 
     def add_person(
-            self, walk_speed: float, count: int = 1, inuries=None, ttl: float = 120, person_id: str = utils.get_id()):
-        if inuries is None:
-            inuries = {}
+            self, walk_speed: float, count: int = 1, injuries=None, ttl: float = 120, person_id: str = utils.get_id()):
+        if injuries is None:
+            injuries = {}
 
         if len(self.people) >= self.max_people or len(self.people) + count > self.max_people:
             raise errors.RoomFull
 
         while count > 0:
-            new_person = Person(walk_speed, ID=person_id, injuries=inuries, ttl=ttl)
+            new_person = Person(walk_speed, ID=person_id, injuries=injuries, ttl=ttl)
             self.people[new_person.ID] = new_person
             count -= 1
 
