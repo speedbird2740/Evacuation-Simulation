@@ -8,10 +8,12 @@ class Building:
     def __init__(self):
         self.structures = {}
         self.structure_connections = []
+        self.people_data = {}
         self.ID = utils.get_id()
 
-    def add_walkway(self, length: float, max_people: int, is_blocked: bool = False, connection: str = None):
-        new_walkway = Walkway(length=length, max_people=max_people, is_blocked=is_blocked)
+    def add_walkway(self, length: float, max_people: int, is_blocked: bool = False, connection: str = None,
+                    is_exit: bool = False):
+        new_walkway = Walkway(length=length, max_people=max_people, is_blocked=is_blocked, is_exit=is_exit)
 
         if connection is not None:
             if connection not in self.structures:
@@ -66,3 +68,13 @@ class Building:
                 await struct.simulate_fire(intensity=value, auto=auto)
             elif name == "smoke":
                 await struct.simulate_smoke(intensity=value, auto=auto)
+
+    def _find_exit(self, person_id: str):
+        location = self.people_data[person_id]["location"]
+
+        if person_id not in self.people_data:
+            raise Exception
+
+        if location not in self.structures:
+            raise Exception
+
