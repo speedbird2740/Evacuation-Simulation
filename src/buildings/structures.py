@@ -90,8 +90,9 @@ class Room:
         self.auto_smoke = False
         self.auto_fire = False
 
-    def add_person(self, walk_speed: float, count: int = 1, injuries=None, ttl: float = 120,
-                   person_id: str = utils.get_id()):
+    def add_person(self, walk_speed: float, count: int = 1, injuries=None, ttl: float = 120):
+        person_ids = []
+
         if injuries is None:
             injuries = {}
 
@@ -99,9 +100,12 @@ class Room:
             raise errors.RoomFull
 
         while count > 0:
-            new_person = Person(walk_speed, ID=person_id, injuries=injuries, ttl=ttl)
-            self.people[new_person.ID] = new_person
+            new_person = Person(walk_speed=walk_speed, ID=utils.get_id(), injuries=injuries, ttl=ttl)
+            self.people[new_person["ID"]] = new_person
+            person_ids.append(new_person["ID"])
             count -= 1
+
+        return person_ids
 
     def get_person(self, person_id: str = None):
         if person_id not in self.people and person_id is not None:
